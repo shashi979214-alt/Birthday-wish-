@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Friendship Day!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 🌸 Animated Soft Pink Background */
+        body {
+            background: linear-gradient(-45deg, #ffc2d1, #ffe5ec, #ffb3c6, #ff85a1);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 💖 Tap Overlay Heart Burst Effect */
+        .tap-heart {
+            position: fixed;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 9999;
+            animation: burstAndFade 0.8s ease-out forwards;
+        }
+
+        @keyframes burstAndFade {
+            0% { transform: translate(-50%, -50%) scale(0.3) rotate(0deg); opacity: 1; }
+            50% { transform: translate(-50%, -100%) scale(1.4) rotate(15deg); opacity: 0.9; }
+            100% { transform: translate(-50%, -150%) scale(1.8) rotate(-15deg); opacity: 0; }
+        }
+
+        /* Falling Background Hearts */
+        .heart-fall {
+            position: fixed;
+            top: -10%;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(255, 105, 180, 0.3));
+        }
+
+        @keyframes fall {
+            to { transform: translateY(115vh) rotate(360deg); }
+        }
+
+        /* Music Controls */
+        .music-control {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.2);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #c9184a;
+        }
+
+        /* Card Container */
+        .card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 28px 22px;
+            border-radius: 28px;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(201, 24, 74, 0.2);
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Base Page Styles */
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Indicator Dots */
+        .page-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 179, 198, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #ff0a54;
+            width: 22px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #ff0a54;
+            font-size: 1.7rem;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 8px rgba(255, 10, 84, 0.15);
+        }
+
+        .subtitle {
+            color: #ff4d6d;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .lock-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            animation: bounceLock 2s ease-in-out infinite;
+        }
+
+        @keyframes bounceLock {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .pass-input {
+            width: 80%;
+            padding: 12px;
+            border-radius: 16px;
+            border: 2px solid #ff4d6d;
+            background: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #c9184a;
+            outline: none;
+            margin: 15px 0 10px 0;
+            box-shadow: 0 4px 12px rgba(255, 77, 109, 0.15);
+        }
+
+        .error-msg {
+            color: #d60000;
+            font-size: 0.82rem;
+            font-weight: bold;
+            display: none;
+            margin-top: 5px;
+        }
+
+        /* PAGE 1 ANIMATIONS */
+        #page1 .cover-photo {
+            animation: popAndRotate 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, floatPhoto 3s ease-in-out infinite alternate 0.8s;
+        }
+
+        .cover-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            object-fit: cover;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.35);
+        }
+
+        @keyframes popAndRotate {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes floatPhoto {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        /* PAGE 2 ANIMATIONS */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .photo-card {
+            width: 100%;
+            height: 110px;
+            border-radius: 18px;
+            border: 3px solid #ffffff;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #ff758f, #ff4d6d);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
+        }
+
+        /* PAGE 3 ANIMATIONS */
+        .counter-badge {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1.5px dashed #ff4d6d;
+            color: #ff0a54;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin: 12px 0;
+        }
+
+        .wish-box {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 18px;
+            padding: 16px;
+            border-left: 4px solid #ff0a54;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 15px;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff0a54);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(255, 10, 84, 0.35);
+            flex: 1;
+        }
+
+        .nav-btn:disabled {
+            background: #ffccd5;
+            color: #ff85a1;
+            box-shadow: none;
+        }
+
+        .note-box {
+            margin-top: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 14px;
+            border-left: 4px solid #ff0a54;
+            color: #800020;
+            font-size: 0.88rem;
+            display: none;
+            text-align: left;
+            width: 100%;
+        }
+
+        .tulip-burst {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .tulip {
+            font-size: 1.6rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body onclick="spawnHeartBurst(event)">
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sweet-piano-112179.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control -->
+    <div class="music-control" onclick="toggleMusic(event)">
+        🎵 <span id="musicText">Play Music</span>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card">
+        
+        <!-- Indicator Dots -->
+        <div class="page-dots" id="dotContainer" style="display: none;">
+            <div class="dot active" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+            <div class="dot" id="dot4"></div>
+        </div>
+
+        <!-- LOCK SCREEN (PAGE 0) -->
+        <div class="page" id="page0" style="display: flex;">
+            <div class="lock-icon">🔒</div>
+            <h1>Secret Access</h1>
+            <p class="subtitle">Enter passcode to unlock your card ✨</p>
+            
+            <input type="text" id="passInput" class="pass-input" placeholder="Enter 1234" onclick="event.stopPropagation();">
+            <div class="error-msg" id="errorMsg">Incorrect password! Try typing 1234 💖</div>
+
+            <button type="button" class="nav-btn" style="width: 80%; margin-top: 15px;" onclick="unlockCard(event)">Unlock Card 🔑</button>
+        </div>
+
+        <!-- PAGE 1: Glass Cover -->
+        <div class="page" id="page1">
+            <h1>Happy Friendship Day! 🌸</h1>
+            <p class="subtitle">A special card for my favorite person ✨</p>
+            <img class="cover-photo" src="1.jpg" alt="Friendship Cover">
+            <p style="color: #a4133c; font-size: 0.92rem; line-height: 1.5; font-weight: 600;">
+                Welcome! Tap anywhere to burst hearts, and hit 'Next' to view your card! 💖
+            </p>
+        </div>
+
+        <!-- PAGE 2: Memories Gallery -->
+        <div class="page" id="page2">
+            <h1>Our Memories 📸</h1>
+            <p class="subtitle">Best moments captured together</p>
+            
+            <label for="imageUploader" class="upload-btn" onclick="event.stopPropagation();">📷 Tap to Upload 4 Photos</label>
+            <input type="file" id="imageUploader" accept="image/*" multiple style="display: none;" onchange="loadPhotos(event)">
+
+            <div class="photo-gallery">
+                <div class="photo-card"><img id="img1" src="2.jpg"></div>
+                <div class="photo-card"><img id="img2" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300"></div>
+                <div class="photo-card"><img id="img3" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300"></div>
+                <div class="photo-card"><img id="img4" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300"></div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: Wish Card -->
+        <div class="page" id="page3">
+            <h1>To My Bestie ✨</h1>
+            <div class="counter-badge">
+                🗓️ Best Friends Forever & Ever!
+            </div>
+            <div class="wish-box">
+                <p style="color: #800020; font-size: 0.95rem; line-height: 1.6; font-weight: 600;">
+                    "Thank you for being the person who brings so much laughter, positivity, and brightness into my life. Having a friend like you makes every single day sweeter!" 🥂🌸
+                </p>
+            </div>
+        </div>
+
+        <!-- PAGE 4: Secret Letters -->
+        <div class="page" id="page4">
+            <h1>Secret Notes 💌</h1>
+            <p class="subtitle">Tap below to bloom tulips & unlock secrets!</p>
+
+            <button class="nav-btn" style="width: 100%; margin-top: 10px;" onclick="toggleNote('note1', event)">🌷 Open Note #1</button>
+            <div id="note1" class="note-box">
+                <div class="tulip-burst">
+                    <span class="tulip">🌷</span>
+                    <span class="tulip">🌷</span>
+                    <span class="tulip">🌷</span>
+                </div>
+                <b>Inside Joke:</b><br>
+                Remember that crazy day when we couldn't stop laughing? Best memory ever! 😂💖
+            </div>
+
+            <button class="nav-btn" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #c9184a, #800020);" onclick="toggleNote('note2', event)">🌷 Open Note #2</button>
+            <div id="note2" class="note-box" style="border-left-color: #c9184a;">
+                <div class="tulip-burst">
+                    <span class="tulip">🌷</span>
+                    <span class="tulip">🌷</span>
+                    <span class="tulip">🌷</span>
+                </div>
+                <b>A Little Promise:</b><br>
+                No matter how busy life gets, I will always be here for you! 🤝✨
+            </div>
+        </div>
+
+        <!-- Nav Controls -->
+        <div class="nav-controls" id="navControls" style="display: none;">
+            <button class="nav-btn" id="prevBtn" onclick="changePage(-1, event)" disabled>Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="changePage(1, event)">Next ➔</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 4;
+
+        // Unlock Logic
+        function unlockCard(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            const val = document.getElementById('passInput').value.trim();
+
+            if (val === "1234") {
+                // Hide page 0
+                document.getElementById('page0').style.setProperty('display', 'none', 'important');
+                
+                // Show page 1
+                document.getElementById('page1').style.setProperty('display', 'flex', 'important');
+                
+                // Show Nav Controls & Dots
+                document.getElementById('dotContainer').style.display = 'flex';
+                document.getElementById('navControls').style.display = 'flex';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        // Tap Heart Effect
+        function spawnHeartBurst(e) {
+            const heart = document.createElement('div');
+            heart.classList.add('tap-heart');
+            heart.innerText = ['💖', '💕', '🌷', '✨', '🌸', '❤️'][Math.floor(Math.random() * 6)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 800);
+        }
+
+        // Page Navigation
+        function changePage(direction, e) {
+            if (e) e.stopPropagation();
+            
+            document.getElementById(`page${currentPage}`).style.setProperty('display', 'none', 'important');
+            document.getElementById(`dot${currentPage}`).classList.remove('active');
+
+            currentPage += direction;
+
+            document.getElementById(`page${currentPage}`).style.setProperty('display', 'flex', 'important');
+            document.getElementById(`dot${currentPage}`).classList.add('active');
+
+            document.getElementById('prevBtn').disabled = (currentPage === 1);
+            
+            if (currentPage === totalPages) {
+                document.getElementById('nextBtn').innerText = 'Finish 🎉';
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                document.getElementById('nextBtn').innerText = 'Next ➔';
+                document.getElementById('nextBtn').disabled = false;
+            }
+        }
+
+        // Photo Uploader
+        function loadPhotos(event) {
+            const files = event.target.files;
+            const imgIds = ['img1', 'img2', 'img3', 'img4'];
+            for (let i = 0; i < Math.min(files.length, 4); i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(imgIds[i]).src = e.target.result;
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        // Music Toggle
+        const music = document.getElementById('bgMusic');
+        const musicText = document.getElementById('musicText');
+
+        function toggleMusic(e) {
+            if (e) e.stopPropagation();
+            if (music.paused) {
+                music.play();
+                musicText.innerText = 'Pause Music';
+            } else {
+                music.pause();
+                musicText.innerText = 'Play Music';
+            }
+        }
+
+        // Falling Hearts Effect
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-fall');
+            heart.innerText = ['💖', '🌸', '✨', '💕', '🌷', '🌺'][Math.floor(Math.random() * 6)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+            heart.style.fontSize = Math.random() * 12 + 14 + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Secret Note Toggle
+        function toggleNote(id, e) {
+            if (e) e.stopPropagation();
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
